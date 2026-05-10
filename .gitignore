@@ -21,6 +21,11 @@ dist-ssr
 !.yarn/versions
 .pnp.*
 
+# shadcn auto-injected AI guidance (regenerated on install)
+.agent/
+AGENTS.md
+CLAUDE.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
