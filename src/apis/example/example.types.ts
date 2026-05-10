@@ -1,8 +1,13 @@
 export interface Example {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface GetExamplesParams {
   search?: string;
+}
+
+export interface CreateExampleRequest {
+  name: string;
+  email: string;
 }

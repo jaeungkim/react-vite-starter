@@ -45,15 +45,34 @@ Query eliminates all of this.
 | Pagination & infinite scroll | `useInfiniteQuery` with `getNextPageParam` |
 | Cache invalidation | `queryClient.invalidateQueries()` by key hierarchy |
 
-### Consumption pattern
+### Consumption pattern (default: Suspense)
 
-```ts
-// ✅ Use query options directly in the component
-const { data, isLoading } = useQuery(projectQueries.list(params));
+Default to `useSuspenseQuery` + `<Suspense>` + `<ErrorBoundary>` from
+`@suspensive/react`. Loading and error states live in the boundaries, so
+component bodies stay focused on rendering data.
 
-// ✅ Derive values from the returned data
-const activeCount = data?.items.filter((p) => p.active).length ?? 0;
+```tsx
+// component
+function ProjectList() {
+  const { data } = useSuspenseQuery(projectQueries.list(params));
+  return <ul>{data.items.map(...)}</ul>;
+}
+
+// caller
+<ErrorBoundary fallback={({ error, reset }) => <ErrorUI ... />}>
+  <Suspense fallback={<Skeleton />}>
+    <ProjectList />
+  </Suspense>
+</ErrorBoundary>
 ```
+
+The router already wraps the tree in `QueryErrorResetBoundary` +
+`ErrorBoundaryGroup` (see `src/routes/Router.tsx`), so a per-section
+`<ErrorBoundary>`/`<Suspense>` automatically integrates with TanStack
+Query's reset.
+
+Use plain `useQuery` only when you need conditional fetching (`enabled`)
+or want to render alongside a loading flag instead of suspending.
 
 ```ts
 // ❌ Copying server data into useState — never do this
@@ -65,6 +84,10 @@ useEffect(() => {
 
 ### Key rules (quick reference)
 
+- `useSuspenseQuery` is the default; reach for `useQuery` only when you
+  need `enabled` or want a non-suspending render.
+- Place `<ErrorBoundary>` + `<Suspense>` at the smallest section that
+  owns the data — not at the page root unless the whole page depends on it.
 - Use `queryOptions()` factories in `apis/{domain}/{domain}.queries.ts` —
   never hardcode `queryKey` arrays inline. See `api.md` §3 for the full
   query key factory pattern.

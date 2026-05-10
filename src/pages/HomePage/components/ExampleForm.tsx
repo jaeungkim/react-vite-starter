@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { useCreateExample } from '@/apis/example';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,11 +21,18 @@ import {
 export default function ExampleForm() {
   const form = useForm<ExampleFormValues>({
     resolver: zodResolver(exampleFormSchema),
+    mode: 'onBlur',
     defaultValues: { name: '', email: '' },
   });
+  const { mutate, isPending } = useCreateExample();
 
   const onSubmit = (values: ExampleFormValues) => {
-    toast.success(`Submitted: ${values.name} <${values.email}>`);
+    mutate(values, {
+      onSuccess: (created) => {
+        toast.success(`Created example: ${created.name}`);
+        form.reset();
+      },
+    });
   };
 
   return (
@@ -60,8 +68,8 @@ export default function ExampleForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          Submit
+        <Button type="submit" disabled={isPending}>
+          {isPending ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
     </Form>

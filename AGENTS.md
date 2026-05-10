@@ -4,7 +4,7 @@ Canonical instructions for any coding agent working in this repo (Claude Code, C
 
 ## Stack
 
-React + Vite SPA. TypeScript, Yarn, Tailwind CSS v4, React Router v7 (declarative mode), TanStack Query, react-hook-form, Zod, Zustand, shadcn/ui.
+React + Vite SPA. TypeScript, Yarn, Tailwind CSS v4, React Router v7 (declarative mode), TanStack Query (Suspense pattern via `@suspensive/react` + `@suspensive/react-query`), react-hook-form, Zod, Zustand, shadcn/ui, `overlay-kit` for dialogs.
 
 ## How to work in this repo
 
@@ -20,6 +20,7 @@ React + Vite SPA. TypeScript, Yarn, Tailwind CSS v4, React Router v7 (declarativ
    | Forms, react-hook-form, Zod, validation | `.agent/workflows/forms.md` |
    | Any React component (`.tsx`) | `.agent/workflows/components.md` AND `.agent/workflows/shadcn.md` |
    | Files in `src/components/ui/**` | `.agent/workflows/shadcn.md` AND `.agent/workflows/components.md` |
+   | Dialogs, modals, overlays (`overlay-kit`) | `.agent/workflows/dialogs.md` |
    | State management (Zustand, Context, server state) | `.agent/workflows/state.md` |
    | New files or directories | `.agent/workflows/folder.md` |
    | Anything not listed above | `.agent/workflows/behavior.md` |
