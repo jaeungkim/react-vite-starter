@@ -61,12 +61,15 @@ keep cross-cutting hooks in `src/hooks/`.
 
 ## Adding shadcn components
 
+The starter pre-installs a common kit: `button`, `input`, `label`, `form`,
+`card`, `dialog`. Pull anything else on demand:
+
 ```
 npx shadcn@latest add <name>
 ```
 
 Components land in `src/components/ui/`. The path alias `@/*` resolves to `src/*`
-via `tsconfig.app.json` and `vite-tsconfig-paths`.
+via `tsconfig.json` + `tsconfig.app.json` and `vite-tsconfig-paths`.
 
 ## Conventions
 

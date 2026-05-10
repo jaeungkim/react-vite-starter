@@ -9,7 +9,7 @@ Decide by origin, not convenience.
 | Kind                                        | Tool                                 |
 | ------------------------------------------- | ------------------------------------ |
 | Server data (from an API)                   | TanStack Query                       |
-| URL-shareable state                         | `useSearchParams` / URL params — one hook per logical concern (see `hooks.md` §0) |
+| URL-shareable state                         | `useSearchParams` / URL params — split by logical concern (one hook per concern) |
 | Form state                                  | react-hook-form                      |
 | Ephemeral UI (open/closed, hover)           | `useState` / `useReducer` local      |
 | Infrequently changing globals (auth, theme, i18n) | React Context                   |
@@ -181,7 +181,7 @@ provide (persistence, outside-React access, subscription-based rendering).
 | Defining stores inside components | Store re-created every render; data lost | Always define at module scope |
 | Whole-store consumption (`useStore()` with no selector) | Every field change triggers a re-render | Always pass a selector `(s) => s.field` |
 | Object/array selector without `useShallow` | New reference every call → unnecessary re-renders | Wrap with `useShallow` for shallow comparison |
-| God-hook for URL params (`usePageState` managing every search param) | Unbounded scope, all consumers re-render on any param change, violates SRP | Split into one hook per concern (see `hooks.md` §0) |
+| God-hook for URL params (`usePageState` managing every search param) | Unbounded scope, all consumers re-render on any param change, violates SRP | Split into one hook per concern |
 
 ---
 

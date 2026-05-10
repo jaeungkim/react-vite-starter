@@ -129,11 +129,11 @@ cross-domain reuse, or infrastructure that is inherently app-wide.
 | --- | --- | --- |
 | `src/apis/` | HTTP clients, query/mutation factories, API types | `api.md` |
 | `src/components/` | Reusable UI components (used by 2+ domains) | `components.md` |
-| `src/hooks/` | Reusable custom hooks (used by 2+ domains) | `hooks.md` |
+| `src/hooks/` | Reusable custom hooks (used by 2+ domains) | — |
 | `src/lib/` | Pure utilities (`cn()`, formatters, helpers) | — |
 | `src/stores/` | App-wide Zustand stores (`use{X}Store.ts`) | `state.md` |
 | `src/test/` | Test setup, custom render, shared mocks | — |
-| `src/types/` | Shared TypeScript types (domain-agnostic) | `typescript.md` |
+| `src/types/` | Shared TypeScript types (domain-agnostic) | — |
 
 `apis/` is **always** at the root level regardless of project scale — API
 code is grouped by resource domain, not by page. See `api.md` for its

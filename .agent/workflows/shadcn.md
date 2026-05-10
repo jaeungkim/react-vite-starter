@@ -1,60 +1,48 @@
 ---
-description: shadcn/ui rules — local default/, wrap in custom/.
+description: shadcn/ui rules — flat src/components/ui/, copy & own.
 ---
 
 ## 1. Where primitives live
 
-- `src/components/ui/default/` — vendored shadcn primitives.
-  Naming: kebab-case (`button.tsx`, `dropdown-menu.tsx`).
-  **Treat as immutable vendor code.**
-- `src/components/ui/custom/` — app-specific wrappers built from
-  `default/` primitives. Naming: PascalCase (`ThemeToggleButton.tsx`).
+- `src/components/ui/` — shadcn primitives, flat. Kebab-case filenames
+  (`button.tsx`, `dropdown-menu.tsx`) — matches what `npx shadcn add`
+  emits.
+- Treat them as **your code**: edit freely, extend variants, rename
+  exports. The shadcn philosophy is copy & own — not vendor-lock.
 
-## 2. Adding a new primitive
+## 2. Adding a primitive
 
-- First check `src/components/ui/default/` — most are already there.
-- If missing, install via the shadcn package (`shadcn` is in
-  dependencies). Add the new file to `default/`, not `custom/`.
-- Never hand-roll a Radix wrapper that shadcn already provides.
+- The starter pre-installs a common kit: `button`, `input`, `label`,
+  `form`, `card`, `dialog`. Pull anything else on demand:
 
-## 3. Wrap, don't override (HARD RULE)
+  ```sh
+  npx shadcn@latest add <name>
+  ```
 
-Do NOT edit files in `src/components/ui/default/` to change padding,
-margin, borders, colors, typography, or layout. The vendored copy must
-stay close to the shadcn baseline so future CLI updates and team-wide
-consistency stay intact.
+- Files land in `src/components/ui/<name>.tsx` (the `@/*` alias is
+  configured in both `tsconfig.json` and `tsconfig.app.json`).
+- If a primitive isn't in the registered style (`radix-nova` per
+  `components.json`), copy from https://ui.shadcn.com/docs/components
+  and adapt — don't hand-roll a Radix wrapper from scratch.
 
-When you need something visually or behaviourally different:
+## 3. Editing primitives
 
-```tsx
-// ❌ Editing the vendor primitive
-// src/components/ui/default/button.tsx
-<button className={cn('px-6 font-semibold', className)} ... />
-
-// ✅ Wrapping in custom/
-// src/components/ui/custom/PrimaryAction.tsx
-import { Button, type ButtonProps } from 'components/ui/default/button';
-import { cn } from 'utils/cn';
-
-export function PrimaryAction({ className, ...props }: ButtonProps) {
-  return <Button className={cn('px-6 font-semibold', className)} {...props} />;
-}
-```
-
-The only edits permitted inside `default/` are upstream-style fixes
-(typos, type errors) — not visual or behavioural customization.
+- Edit them when you need to. If a variant is reusable, prefer adding
+  it to the existing `cva(...)` config over forking the file or
+  wrapping it.
+- For one-off styling tweaks at a call site, pass `className` —
+  `cn()` merges it correctly.
 
 ## 4. Composition rules
 
-- Custom components import from `components/ui/default/<name>` (alias).
-- Preserve `data-slot` attributes when wrapping (shadcn v4 convention —
-  enables external styling and querying).
+- Preserve `data-slot` attributes when wrapping or extending (shadcn
+  v4 convention — enables external styling and querying).
 - Use `class-variance-authority` (cva) for variants.
 - Icons: `lucide-react` only.
 
 ## 5. Styling — see `components.md` §7
 
-- Use `cn()` from `src/utils/cn.ts` (clsx + tailwind-merge) for all
+- Use `cn()` from `src/lib/utils.ts` (clsx + tailwind-merge) for all
   class composition. Do not use template literals or string
   concatenation.
 - Design tokens live in `src/index.css` inside `@theme inline`.
@@ -69,7 +57,6 @@ The only edits permitted inside `default/` are upstream-style fixes
 
 - Theme is a className on `document.documentElement`: `"light"` |
   `"dark"`.
-- `ThemeToggleButton` in `src/components/ui/custom/` owns the toggle.
 - Never write manual `dark:` variants when a semantic token already
   adapts to mode.
 
@@ -82,5 +69,3 @@ The only edits permitted inside `default/` are upstream-style fixes
 ## 8. References
 
 - https://ui.shadcn.com/docs
-- https://vercel.com/academy/shadcn-ui/extending-shadcn-ui-with-custom-components
-- https://ui.spectrumhq.in/blog/shadcn-customization-guide

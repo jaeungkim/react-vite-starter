@@ -4,16 +4,21 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
   exampleFormSchema,
   type ExampleFormValues,
 } from '@/pages/HomePage/schemas/exampleForm.schema';
 
 export default function ExampleForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ExampleFormValues>({
+  const form = useForm<ExampleFormValues>({
     resolver: zodResolver(exampleFormSchema),
     defaultValues: { name: '', email: '' },
   });
@@ -23,30 +28,42 @@ export default function ExampleForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex max-w-sm flex-col gap-3"
-      noValidate
-    >
-      <input
-        {...register('name')}
-        placeholder="Name"
-        className="border-input rounded-md border px-3 py-2 text-sm"
-      />
-      {errors.name && (
-        <span className="text-destructive text-sm">{errors.name.message}</span>
-      )}
-      <input
-        {...register('email')}
-        placeholder="Email"
-        className="border-input rounded-md border px-3 py-2 text-sm"
-      />
-      {errors.email && (
-        <span className="text-destructive text-sm">{errors.email.message}</span>
-      )}
-      <Button type="submit" disabled={isSubmitting}>
-        Submit
-      </Button>
-    </form>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex max-w-sm flex-col gap-4"
+        noValidate
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          Submit
+        </Button>
+      </form>
+    </Form>
   );
 }

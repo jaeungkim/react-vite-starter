@@ -9,7 +9,6 @@ React + Vite SPA. TypeScript, Yarn, Tailwind CSS v4, React Router v7 (declarativ
 ## How to work in this repo
 
 1. **Read the baseline rules** before any task:
-   - `.agent/workflows/frontend-fundamentals.md` — 4 principles (readability, predictability, cohesion, coupling) and SOLID for React.
    - `.agent/workflows/behavior.md` — how to think, plan, and change code.
    - `.agent/workflows/commands.md` — verification commands.
 
@@ -21,41 +20,28 @@ React + Vite SPA. TypeScript, Yarn, Tailwind CSS v4, React Router v7 (declarativ
    | Forms, react-hook-form, Zod, validation | `.agent/workflows/forms.md` |
    | Any React component (`.tsx`) | `.agent/workflows/components.md` AND `.agent/workflows/shadcn.md` |
    | Files in `src/components/ui/**` | `.agent/workflows/shadcn.md` AND `.agent/workflows/components.md` |
-   | Custom hooks (`use*.ts`) | `.agent/workflows/hooks.md` |
-   | State management (Zustand, Context) | `.agent/workflows/state.md` |
+   | State management (Zustand, Context, server state) | `.agent/workflows/state.md` |
    | New files or directories | `.agent/workflows/folder.md` |
-   | TypeScript types or interfaces | `.agent/workflows/typescript.md` |
-   | Routes, navigation, react-router | `.agent/workflows/react-router.md` |
-   | Loading, skeleton, error, empty states | `.agent/workflows/loading-states.md` |
-   | React hooks or component lifecycle patterns | `.agent/workflows/react.md` |
-   | Tailwind classes, design tokens, dark mode | `.agent/workflows/tailwind.md` |
-   | Anything not listed above | `.agent/workflows/behavior.md` + `.agent/workflows/frontend-fundamentals.md` |
+   | Anything not listed above | `.agent/workflows/behavior.md` |
 
-3. **Implement.** Follow every rule from the files you read. When two files conflict, the domain file wins over `frontend-fundamentals.md`. When uncertain, stop and ask — never guess.
+3. **Implement.** Follow every rule from the files you read. When two files conflict, the more specific one wins. When uncertain, stop and ask — never guess.
 
 4. **Verify.** Run `yarn lint && yarn type-check`. Fix every error. Report the commands and their exit status. Don't say "done" unless both pass.
 
-## Reference docs
+## Library docs
 
-For library APIs (React, Tailwind v4, TanStack Query, react-hook-form, Zod, react-router, …), prefer up-to-date sources over guessing from training-data memory:
+When you need an API detail you're not 100% sure of — React 19, Tailwind v4, TanStack Query, react-hook-form, Zod, react-router-dom, shadcn/ui, etc. — look it up before writing code:
 
-- Use **Context7 MCP** when available — `resolve-library-id` then `query-docs` pulls live docs.
-- Otherwise fall back to the official site (`react.dev`, `tailwindcss.com`, `tanstack.com/query`, …).
+- **Context7 MCP** is the preferred lookup path. Call `resolve-library-id` for the package, then `query-docs`.
+- If Context7 doesn't cover the package, fall back to the official site (`react.dev`, `tailwindcss.com`, `tanstack.com/query`, `react-hook-form.com`, `zod.dev`, `ui.shadcn.com`, …).
 
-`.agent/workflows/react.md` and `.agent/workflows/tailwind.md` are intentionally short — they cover repo-specific rules and link out for the API reference.
+Don't guess from training-data memory; v4-style fast-moving packages drift fast enough that the agent's memory is often wrong.
 
 ## How these files fit together
 
-- `frontend-fundamentals.md` is the decision framework when no mechanical rule applies.
-- The domain files (api, forms, components, hooks, …) are authoritative for their domain. When they conflict with `frontend-fundamentals.md`, the domain file wins.
+- The domain files (api, forms, components, shadcn, state, folder) are authoritative for their domain.
+- `behavior.md` is the fallback when no domain rule applies.
 - Don't duplicate rules across files. When a file cross-references another, follow the link.
-
-## Common mistakes to avoid
-
-- **Mirroring server data into `useState`.** TanStack Query is the single source of truth for server state — see `state.md` §1.
-- **Reaching for `useMemo` / `useCallback` / `React.memo` by default.** Memoize only when you can name the specific re-render or computation it prevents — see `components.md` §9.
-- **Editing `src/components/ui/default/*` to restyle a primitive.** That folder is vendored shadcn code; wrap in `src/components/ui/custom/` instead — see `shadcn.md` §3.
-- **Extracting a shared abstraction from two similar-looking call sites.** Allow duplication when divergence is plausible within ~3 months — see `frontend-fundamentals.md` Rule 4.2.
 
 ## Non-negotiable
 

@@ -90,6 +90,3 @@ Before extracting a shared abstraction, ask:
 3. If it diverges, can I split it back without breaking callers?
 
 If the answer to #2 is "probably not," keep the duplication.
-
-Cross-ref: `frontend-fundamentals.md` Rule 4.2 and the decision tree
-under §4.

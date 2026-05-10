@@ -27,7 +27,6 @@ See `folder.md` for where component files live:
      leaf directly, eliminating the middleman component.
   2. **Context second** — if depth remains after composition, use a
      scoped Context Provider (see `state.md`).
-  Cross-ref: `frontend-fundamentals.md` Rule 4.3.
 
 ## 4. UI vs logic split
 
@@ -53,8 +52,6 @@ function SubmitButton() {
   return useRole() === 'viewer' ? <ViewerSubmit /> : <AdminSubmit />;
 }
 ```
-
-Cross-ref: `frontend-fundamentals.md` Rule 1.1.
 
 ### Extract imperative handler logic
 
